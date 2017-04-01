@@ -7,11 +7,10 @@ import (
 	"time"
 )
 
-func Connect() (c *websocket.Conn, err error) {
+func Connect(url string) (c *websocket.Conn, err error) {
 	dialer := &websocket.Dialer{}
 	dialer.EnableCompression = false
-	place_url := "YOUR WSS URL HERE"
-	c, _, err = dialer.Dial(place_url, nil)
+	c, _, err = dialer.Dial(url, nil)
 	if err != nil {
 		return c, err
 	}
