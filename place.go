@@ -29,8 +29,10 @@ type PlacePayload struct {
 	Date   time.Time `json:"date"`
 }
 
+const URL = "YOUR WSS URL HERE"
+
 func main() {
-	c, _ := Connect()
+	c, _ := Connect(URL)
 	for {
 		_, packet, err := c.ReadMessage()
 		if err != nil {
