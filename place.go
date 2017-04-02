@@ -7,12 +7,14 @@ import (
 	"time"
 )
 
-func Connect() (c *websocket.Conn, err error) {
+func Connect(url string) (c *websocket.Conn, err error) {
 	dialer := &websocket.Dialer{}
 	dialer.EnableCompression = false
-	place_url := "YOUR WSS URL HERE"
-	c, _, err = dialer.Dial(place_url, nil)
-	return
+	c, _, err = dialer.Dial(url, nil)
+	if err != nil {
+		return c, err
+	}
+	return c, err
 }
 
 type Place struct {
@@ -27,22 +29,25 @@ type PlacePayload struct {
 	Date   time.Time `json:"date"`
 }
 
+const URL = "YOUR WSS URL HERE"
+
 func main() {
-	c, _ := Connect()
+	c, _ := Connect(URL)
 	for {
 		_, packet, err := c.ReadMessage()
 		if err != nil {
 			fmt.Println(err)
-		} else {
-			var p Place
-			err := json.Unmarshal(packet, &p)
-			if err != nil {
-				panic(err)
-			} else {
-				p.Date = time.Now()
-				pStr, _ := json.Marshal(p)
-				fmt.Println(string(pStr))
-			}
+			continue
 		}
+
+		var p Place
+		err := json.Unmarshal(packet, &p)
+		if err != nil {
+			panic(err)
+		}
+
+		p.Date = time.Now()
+		pStr, _ := json.Marshal(p)
+		fmt.Println(string(pStr))
 	}
 }
