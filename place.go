@@ -37,16 +37,17 @@ func main() {
 		_, packet, err := c.ReadMessage()
 		if err != nil {
 			fmt.Println(err)
-		} else {
-			var p Place
-			err := json.Unmarshal(packet, &p)
-			if err != nil {
-				panic(err)
-			} else {
-				p.Date = time.Now()
-				pStr, _ := json.Marshal(p)
-				fmt.Println(string(pStr))
-			}
+			continue
 		}
+
+		var p Place
+		err := json.Unmarshal(packet, &p)
+		if err != nil {
+			panic(err)
+		}
+
+		p.Date = time.Now()
+		pStr, _ := json.Marshal(p)
+		fmt.Println(string(pStr))
 	}
 }
